@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="منصة الزمكان مع مستر محمود السيد هو مجتمع فيزيائي يهدف إلى شرح وتحليل مادة الفيزياء بطريقة مبسطة وتفاعلية.">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+        <link rel="stylesheet" href="2.offline.css">
+        <title>الصف الثاني الثانوي - طالب السنتر </title>
+    </head>
+<body>
+    <!-- Header -->
+  <div class="header">
+    
+    <h1 style="color: #B22222;"> الصف الثالث الثانوي -طالب السنتر</h1>
+    <img src="NASA-Logo-Vinyl-Sticker-Round-3-inch-diameter.jpg" class="logo" alt="شعار المنصة" />
+    
+  </div>
+<br>
+<div class="inputs">
+    <h2>تسجيل الدخول</h2>
+    <form id="loginForm">
+      <input type="text" id="studentName" placeholder=" اسم الطالب بالعربي" required>
+      
+      <select id="group" required>
+        <option value="">اختر المجموعة</option>
+        <option value="A">المجموعة A</option>
+        <option value="B">المجموعة B</option>
+        <option value="C">المجموعة C</option>
+      </select>
+
+      <input type="text" id="studentCode" placeholder=" كود الطالب رقم وحروف انجليزي"  required pattern="[A-Za-z0-9]+">
+      <input type="text" id="platformCode" placeholder=" كود المنصة حروف وارقام انجليزي" required pattern="[A-Za-z0-9]+">
+
+      <button type="submit">تسجيل الدخول</button>
+    </form>
+  </div>
+</body>
+<script>
+    // يمنع الحروف العربية من الظهور في حقل معين
+    function preventArabicInput(inputElement, errorElement) {
+      inputElement.addEventListener('input', function () {
+        const arabicRegex = /[\u0600-\u06FF]/g;
+
+        if (arabicRegex.test(this.value)) {
+          this.value = this.value.replace(arabicRegex, '');
+          errorElement.textContent = 'ممنوع استخدام الحروف العربية';
+        } else {
+          errorElement.textContent = '';
+        }
+      });
+    }
+
+    // تأكد من الاسم عربي فقط
+    function isArabicOnly(text) {
+      const arabicRegex = /^[\u0600-\u06FF\s]+$/;
+      return arabicRegex.test(text);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const studentName = document.getElementById('studentName');
+      const group = document.getElementById('group');
+      const studentCode = document.getElementById('studentCode');
+      const platformCode = document.getElementById('platformCode');
+
+      const studentCodeError = document.getElementById('studentCodeError');
+      const platformCodeError = document.getElementById('platformCodeError');
+
+      preventArabicInput(studentCode, studentCodeError);
+      preventArabicInput(platformCode, platformCodeError);
+
+      document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = studentName.value.trim();
+        const groupVal = group.value.trim();
+        const studentCodeVal = studentCode.value.trim();
+        const platformCodeVal = platformCode.value.trim();
+
+        if (!isArabicOnly(name)) {
+          alert('اسم الطالب يجب أن يكون باللغة العربية فقط');
+          return;
+        }
+
+        if (groupVal === '') {
+          alert('من فضلك اختر المجموعة');
+          return;
+        }
+
+        if (!studentCodeVal || !/^[A-Za-z0-9]+$/.test(studentCodeVal)) {
+          alert('كود الطالب يجب أن يحتوي على أرقام أو حروف إنجليزية فقط');
+          return;
+        }
+
+        if (!platformCodeVal || !/^[A-Za-z0-9]+$/.test(platformCodeVal)) {
+          alert('كود المنصة يجب أن يحتوي على أرقام أو حروف إنجليزية فقط');
+          return;
+        }
+
+        // ✅ البيانات صحيحة
+        alert('تم تسجيل الدخول بنجاح ✅');
+        window.location.href = "main3off.html";
+      });
+    });
+  </script>
+</script>
+</html>

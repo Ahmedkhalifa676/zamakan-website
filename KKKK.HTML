@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تسجيل دخول الطالب</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .form-container {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #B22222;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #8b1a1a;
+    }
+
+    .toggle-link {
+      display: block;
+      margin-top: 15px;
+      color: #B22222;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2 id="form-title">تسجيل حساب جديد</h2>
+    <form id="student-form">
+      <div id="new-account-fields">
+        <input type="text" id="student-name" placeholder="اسم الطالب" required />
+        <input type="tel" id="phone" placeholder="رقم التليفون" required />
+        <select id="group" required>
+          <option value="">اختر المجموعة</option>
+          <option value="A">مجموعة A</option>
+          <option value="B">مجموعة B</option>
+          <option value="C">مجموعة C</option>
+        </select>
+      </div>
+      <input type="text" id="student-code" placeholder="كود الطالب" required />
+      <input type="password" id="password" placeholder="الرقم السري" required />
+      <button type="submit">دخول</button>
+      <span class="toggle-link" onclick="toggleForm()">📌 لديك حساب؟ اضغط هنا</span>
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <script>
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwsKCDpYur9oEfWPQr7NiPotyx1GcNqs48WCd8eFUtSMPU_5h4dmxAQK9jL9J1NcNtJeg/exec";
+
+    let isLoginMode = false;
+
+    function toggleForm() {
+      isLoginMode = !isLoginMode;
+      document.getElementById("form-title").innerText = isLoginMode ? "تسجيل دخول" : "تسجيل حساب جديد";
+      document.getElementById("new-account-fields").style.display = isLoginMode ? "none" : "block";
+    }
+
+    document.getElementById("student-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("student-name").value;
+      const phone = document.getElementById("phone").value;
+      const group = document.getElementById("group").value;
+      const code = document.getElementById("student-code").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      const formData = new FormData();
+      formData.append("mode", isLoginMode ? "login" : "register");
+      formData.append("name", name);
+      formData.append("phone", phone);
+      formData.append("group", group);
+      formData.append("code", code);
+      formData.append("password", password);
+
+      try {
+        const res = await fetch(scriptURL, {
+          method: "POST",
+          body: formData
+        });
+        const result = await res.text();
+        document.getElementById("status").innerText = result;
+
+        if (result.includes("نجاح")) {
+          setTimeout(() => {
+            window.location.href = "2.offline.html";
+          }, 1500);
+        }
+      } catch (err) {
+        document.getElementById("status").innerText = "⚠️ حدث خطأ أثناء الاتصال بالخادم.";
+      }
+    });
+  </script>
+</body>
+</html>
+
